@@ -1,35 +1,83 @@
-import * as React from 'react'
-import { Link } from 'gatsby'
-import {
-  container,
-  heading,
-  navLinks,
-  navLinkItem,
-  navLinkText
-} from './layout.module.css'
+import React from "react";
+import { css } from "@emotion/react";
+import { useStaticQuery, Link, graphql } from "gatsby";
+import { rhythm } from "../utils/typography";
 
-const Layout = ({ pageTitle, children }) => {
+export default function Layout({ children }) {
+  const data = useStaticQuery(
+    graphql`
+      query {
+        site {
+          siteMetadata {
+            title
+          }
+        }
+      }
+    `
+  );
   return (
-    <main className={container}>
-      <title>{pageTitle}</title>
-      <nav>
-        <ul className={navLinks}>
-          <li className={navLinkItem}>
-            <Link to="/" className={navLinkText}>
-              Home
-            </Link>
-          </li>
-          <li className={navLinkItem}>
-            <Link to="/about" className={navLinkText}>
-              About
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <h1 className={heading}>{pageTitle}</h1>
-      {children}
-    </main>
-  )
+    <div
+      css={css`
+        margin: 0 auto;
+        max-width: 1200px;
+        padding: ${rhythm(0.5)};
+        padding-top: ${rhythm(0.5)};
+      `}
+    >
+      <div>
+        <Link to={`/`}>
+          <h3
+            css={css`
+              display: inline-block;
+              font-style: normal;
+            `}
+          >
+            {data.site.siteMetadata.title}
+          </h3>
+        </Link>
+        <Link
+          to={`/about/`}
+          css={css`
+            float: right;
+            padding-left: ${rhythm(1.5)};
+          `}
+        >
+          About
+        </Link>
+        <Link
+          to={`/`}
+          css={css`
+            float: right;
+            padding-left: ${rhythm(1.5)};
+          `}
+        >
+          Home
+        </Link>
+        <Link
+          to={`/my-files/`}
+          css={css`
+            float: right;
+            padding-left: ${rhythm(1.5)};
+          `}
+        >
+          All Files
+        </Link>
+      </div>
+      <div
+        css={css`
+          width: 100vw;
+          height: 15vh;
+          position: relative;
+          left: 50%;
+          right: 50%;
+          margin-left: -50vw;
+          margin-right: -50vw;
+          background: #d4d4d4;
+          margin-bottom: ${rhythm(1)};
+          z-index: -99;
+        `}
+      ></div>
+      <div>{children}</div>
+    </div>
+  );
 }
-
-export default Layout
